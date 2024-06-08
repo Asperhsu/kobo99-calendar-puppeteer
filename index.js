@@ -8,11 +8,11 @@ const dayjs = require('dayjs');
 
 (async () => {
     const browser = await puppeteer.connect({
-        browserWSEndpoint: 'ws://localhost:3000'
+        browserWSEndpoint: 'ws://127.0.0.1:3000'
     });
     const page = await browser.newPage();
 
-    let link = findArticleLink(page);
+    let link = await findArticleLink(page);
     if (!link) {
         console.log('error: can not find article link');
         browser.close();
@@ -26,6 +26,7 @@ const dayjs = require('dayjs');
         browser.close();
         return;
     }
+    browser.close();
 
     console.log(`found ${books.length} books`);
     const bookDateUnixs = books.map(book => book.date).sort((a, b) => a - b);
