@@ -4,7 +4,6 @@ const {listEvents} = require('./src/google-calendar.js');
 const {getFilepath, writeJson} = require('./src/json-db.js');
 
 (async () => {
-    console.log(process.argv);
     let year = process.argv[2];
     if (!year) {
         console.log('please pass year argument');
