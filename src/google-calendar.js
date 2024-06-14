@@ -45,7 +45,7 @@ module.exports.listEvents = async function (fromUnix, toUnix) {
 };
 
 module.exports.insertBookEvent = async function (book) {
-    let date = dayjs.unix(book.date);
+    let date = dayjs.unix(book.timestamp);
 
     const data = {
         summary: book.title,
@@ -60,7 +60,8 @@ module.exports.insertBookEvent = async function (book) {
         },
         extendedProperties: {
             shared: {
-                id: book.id
+                id: book.id,
+                meta: book.meta,
             }
         }
     };

@@ -29,11 +29,14 @@ const dayjs = require('dayjs');
     browser.close();
 
     console.log(`found ${books.length} books`);
-    const bookDateUnixs = books.map(book => book.date).sort((a, b) => a - b);
-    const fromUnix = bookDateUnixs[0];
-    const toUnix = bookDateUnixs[bookDateUnixs.length - 1];
+    const bookTimestamps = books.map(book => book.timestamp).sort((a, b) => a - b);
+    const fromTimestamp = bookTimestamps[0];
+    const toTimestamp = bookTimestamps[bookTimestamps.length - 1];
+    const timestampToHuman = (timestamp) => {
+        return dayjs.unix(timestamp).format('YYYY-MM-DD');
+    };
 
-    console.log(`list events from ${dayjs.unix(fromUnix).format('YYYY-MM-DD')} to ${dayjs.unix(toUnix).format('YYYY-MM-DD')}`);
+    console.log(`list events from ${timestampToHuman(fromTimestamp)} to ${timestampToHuman(toTimestamp)}`);
     const events = await listEvents(fromUnix, toUnix);
     console.log(`${events.length} events exists`);
 

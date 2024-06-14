@@ -68,7 +68,8 @@ module.exports.findBooks = async function (page, link) {
 
         return {
             id: helpers.md5(bookInfo.link),
-            date: date.unix(),
+            timestamp: date.unix(),
+            dateLocal: date.format('YYYY-MM-DD'),
             title,
             description: [
                 intro ? `<p>${intro}</p>` : null,
@@ -77,6 +78,13 @@ module.exports.findBooks = async function (page, link) {
                 ...bookInfo.infos.map(info => `<div>${info}</div>`),
                 `<div><a href="${link}">Kobo Blog</a></div>`,
             ].filter(desc => !!desc).join(''),
+            meta: {
+                link: bookInfo.link,
+                intro: intro,
+                author: bookInfo.author,
+                infos: bookInfo.infos,
+                ref: link,
+            },
         };
     }).filter(book => !!book);
     // console.log(books);
