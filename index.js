@@ -2,8 +2,8 @@ require('dotenv').config();
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
-const {findArticleLink, findBooks} = require('./kobo.js');
-const {listEvents, insertBookEvent} = require('./google-calendar.js');
+const {findArticleLink, findBooks} = require('./src/kobo.js');
+const {listEvents, insertBookEvent} = require('./src/google-calendar.js');
 const dayjs = require('dayjs');
 
 (async () => {
