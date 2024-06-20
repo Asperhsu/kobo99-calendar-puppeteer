@@ -26,12 +26,14 @@ const findContentInfos = async function (page) {
             return {
                 title: el.querySelector('h3')?.innerText,
                 intro: el.querySelector('p, div')?.innerText,
+                link: el.querySelector('a')?.href,
             };
         });
     })).map(function (info, i) {
         let date = helpers.parseDateFromText(info.title);
         let title = helpers.findBookTitle(info.title);
-        return date && title ? {date, title, intro: info.intro} : null;
+        let link = helpers.removeUrlParams(info.link);
+        return date && title ? {date, title, link, intro: info.intro} : null;
     }).filter(info => !!info);
 };
 
@@ -62,9 +64,21 @@ module.exports.findBooks = async function (page, link) {
     let contentInfos = await findContentInfos(page);
     let bookInfos = await findBookInfos(page);
 
-    let books = contentInfos.map(({date, title, intro}) => {
-        let bookInfo = bookInfos.find(info => info.title === title);
-        if (!bookInfo) return null;
+    let books = contentInfos.map(({date, title, link, intro}) => {
+        let bookInfo = (() => {
+            let info;
+            info = bookInfos.find(info => info.link == link);
+            if (info) return info;
+
+            info = bookInfos.find(info => info.title == title);
+            if (info) return info;
+
+            return null;
+        })();
+        if (!bookInfo) {
+            console.log('not found: ' + title);
+            return null;
+        }
 
         return {
             id: helpers.md5(bookInfo.link),
