@@ -56,8 +56,8 @@ const findBookInfos = async function (page) {
     });
 };
 
-module.exports.findBooks = async function (page, link) {
-    await page.goto(link, {
+module.exports.findBooks = async function (page, articleLink) {
+    await page.goto(articleLink, {
         waitUntil: 'load',
     });
 
@@ -90,14 +90,14 @@ module.exports.findBooks = async function (page, link) {
                 `<div><a href="${bookInfo.link}">查看電子書</a></div>`,
                 bookInfo.author ? `<div>${bookInfo.author}</div>` : null,
                 ...bookInfo.infos.map(info => `<div>${info}</div>`),
-                `<div><a href="${link}">Kobo Blog</a></div>`,
+                `<div><a href="${articleLink}">Kobo Blog</a></div>`,
             ].filter(desc => !!desc).join(''),
             meta: {
                 link: bookInfo.link,
                 intro: intro,
                 author: bookInfo.author,
                 infos: bookInfo.infos,
-                ref: link,
+                ref: articleLink,
             },
         };
     }).filter(book => !!book);
